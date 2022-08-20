@@ -2,8 +2,8 @@
 // ********************************************************************************************************************
 // @file        ad5932.c
 // @brief:      Programmable frequency scan generator with SPI
-// @version     1.0
-// @date        2022.08.17
+// @version     1.1
+// @date        2022.08.20
 // @author      Tamas Kovacs, Tamas Besenyi
 // ********************************************************************************************************************
 
@@ -56,13 +56,6 @@ u32 ad5932MCLK;
 //-Set CTRL pin high only after the last command, for like 100us. (low->high->low)
 //-SPI mode should be CHPA: first clock edge, and CPOL: Low", but the communications is worked at all possible SPI modes in my board. o.O
 
-//To use this code in your project, do these:
-//-change AD5932_SetSPI() and AD5932_SendSPICommand() functions to your SPI commands
-//-change SPARE0_on() ... SPARE3_off() GPIO pin on/off functions
-//-implement your delay_us() usec delay function
-//-call AD5932_Init() first, then call AD5932_SetSPI() to set the SPI port
-//-test your HW with this self-contained command: AD5932_TestSetup();
-
 // --------------------------------------------------------------------------------------------------------------------
 // Functions
 // --------------------------------------------------------------------------------------------------------------------
@@ -75,6 +68,19 @@ u32 ad5932MCLK;
 void AD5932_SetSPI(LPC_SSP_TypeDef* SSPx)
 {
 	SSPPort = SSPx;
+}
+
+// ....................................................................................................................
+// @brief:      Set / Clear AD5932 FSYNC pin.
+// @param[in]:  none
+// @return:     none
+// ....................................................................................................................
+void AD5932_SetFSYNCPin(bool state)
+{
+	if (state)
+		SPARE0_on();
+	else
+		SPARE0_off();
 }
 
 // ....................................................................................................................
@@ -98,19 +104,6 @@ s32 AD5932_SendSPICommand(u16 commandWord)
 	}
 	else
 		return AD5932_PORT_BUSY;
-}
-
-// ....................................................................................................................
-// @brief:      Set / Clear AD5932 FSYNC pin.
-// @param[in]:  none
-// @return:     none
-// ....................................................................................................................
-void AD5932_SetFSYNCPin(bool state)
-{
-	if (state)
-		SPARE0_on();
-	else
-		SPARE0_off();
 }
 
 // ....................................................................................................................
@@ -298,6 +291,18 @@ void AD5932_TriggerCTRLPin(void)
 	AD5932_SetCTRLPin(true);
 	delay_us(100);
 	AD5932_SetCTRLPin(false);
+}
+
+// ....................................................................................................................
+// @brief:      Triggers the INT pin that resets the internal state machine.
+// @param[in]:  none
+// @return:     none
+// ....................................................................................................................
+void AD5932_TriggerINTPin(void)
+{
+	AD5932_SetINTPin(true);
+	delay_us(100);
+	AD5932_SetINTPin(false);
 }
 
 // ....................................................................................................................

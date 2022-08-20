@@ -2,8 +2,8 @@
 // ********************************************************************************************************************
 // @file        ad5932.h
 // @brief:      Programmable frequency scan generator with SPI
-// @version     1.0
-// @date        2022.08.17
+// @version     1.1
+// @date        2022.08.20
 // @author      Tamas Kovacs, Tamas Besenyi
 // ********************************************************************************************************************
 
@@ -70,6 +70,7 @@ typedef enum _AD5932_IncIntervall_t
 void AD5932_SetSPI(LPC_SSP_TypeDef* SSPx);
 void AD5932_Init(u32 MCLK);
 void AD5932_TriggerCTRLPin(void);
+void AD5932_TriggerINTPin(void);
 s32 AD5932_SingleFrequencyGenerator(u32 frequency, RegBits_t WAVE_TYPE, RegBits_t MSBOUT, RegBits_t TRIGGER);
 s32 AD5932_SweepGenerator(u32 startFreq, u32 deltaFrerq, u32 increment, AD5932_IncIntervall_t INCRTYPE, u32 incIntervall, RegBits_t SWEEPTYPE, RegBits_t WAVE_TYPE, RegBits_t MSBOUT, RegBits_t TRIGGER, RegBits_t SYNCSEL, RegBits_t SYNCOUT);
 s32 AD5932_TestSetup(void);
