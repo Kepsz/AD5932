@@ -2,8 +2,8 @@
 // ********************************************************************************************************************
 // @file        ad5932.h
 // @brief:      Programmable frequency scan generator with SPI
-// @version     1.1
-// @date        2022.08.20
+// @version     1.2
+// @date        2022.09.03
 // @author      Tamas Kovacs, Tamas Besenyi
 // ********************************************************************************************************************
 
@@ -24,6 +24,18 @@
 #define AD5932_PARAM_ERROR		0xFFF0
 #define AD5932_ACCU_RESOLUTION	0x1000000
 
+//parameter structure for external use
+typedef struct
+{
+	u32 startF;
+	u32 deltaF;
+	u32 increment;
+	u32 intervall;
+	bool incrementBase;
+	bool sweepType;
+} AD5932Params_t;
+
+//config bits
 typedef enum _RegBits_t
 {
 	DAC_EN					= 1,
